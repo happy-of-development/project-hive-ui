@@ -26,14 +26,14 @@
               <b-dropdown-item href="/mm/user">구성원</b-dropdown-item>
               <b-dropdown-item href="/mm/pm">PM</b-dropdown-item>
             </b-nav-item-dropdown>
-            <b-nav-item href="/profile" class="nav-link px-2">이름</b-nav-item>
-        </b-nav>
+            <b-nav-item href="/profile" class="nav-link px-2">프로필</b-nav-item>
+          </b-nav>
         </ul>
 
-        <div class="col-md-3 text-end">
-          <button type="button" class="btn btn-outline-primary me-2">Login</button>
-          <button type="button" class="btn btn-primary">Sign-up</button>
-        </div>
+        <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
+          <router-link class="btn btn-outline-primary me-2" to="/login">Sign in</router-link>
+          <router-link class="btn btn-primary" to="/">Sign up</router-link>
+        </ul>
       </header>
     </div>
   </div>

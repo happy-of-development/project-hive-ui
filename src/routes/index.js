@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter from "vue-router";
+import signup from "../views/Signup.vue"
 import login from "../views/Login.vue"
 import profile from "../views/Profile.vue"
 import ProjectDashBoard from "../views/ProjectDashBoard.vue"
@@ -17,8 +18,13 @@ export const router = new VueRouter({
   mode: 'history',
   routes: [
     {
+      path: "/",
+      name: "/signup",
+      component: signup,
+    },
+    {
       path: "/login",
-      redirect: "/login",
+      name: "/login",
       component: login,
     },
     {
