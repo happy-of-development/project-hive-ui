@@ -1,6 +1,6 @@
 <template>
   <div>
-   MemberDashBoard
+    DashBoardTeam
   </div>
 </template>
 

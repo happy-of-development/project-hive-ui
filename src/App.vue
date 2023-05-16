@@ -1,22 +1,15 @@
+<script setup lang="ts">
+import { RouterLink, RouterView } from 'vue-router'
+import GnbMenu from './components/GnbMenu.vue'
+</script>
+
 <template>
   <div id="app">
-    <gnb-menu></gnb-menu>
-    <transition name="page">
-      <router-view></router-view>
-    </transition>
+    <GnbMenu />
+    <RouterView />
   </div>
 </template>
 
-<script>
-import GnbMenu from './components/GnbMenu.vue';
-
-export default {
-  components: {
-    GnbMenu,
-  },
-}
-</script>
-
-<style>
+<style scoped>
 
 </style>

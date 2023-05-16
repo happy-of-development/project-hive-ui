@@ -22,10 +22,11 @@
               <b-dropdown-item href="/management/team">팀</b-dropdown-item>
               <b-dropdown-item href="/management/user">구성원</b-dropdown-item>
             </b-nav-item-dropdown>
-            <b-nav-item-dropdown class="nav-link px-2" id="mm-nav-dropdown" text="MM" toggle-class="nav-link-mm" left>
-              <b-dropdown-item href="/mm/user">구성원</b-dropdown-item>
-              <b-dropdown-item href="/mm/pm">PM</b-dropdown-item>
-            </b-nav-item-dropdown>
+            <li class="nav-link px-2"><a href="/project/mm" class="nav-link">MM</a></li>
+<!--            <b-nav-item-dropdown class="nav-link px-2" id="mm-nav-dropdown" text="MM" toggle-class="nav-link-mm" left>-->
+<!--              <b-dropdown-item href="/project/mm">MM</b-dropdown-item>-->
+<!--              <b-dropdown-item href="/project/pm">PM</b-dropdown-item>-->
+<!--            </b-nav-item-dropdown>-->
             <b-nav-item href="/profile" class="nav-link px-2">이름</b-nav-item>
         </b-nav>
         </ul>
