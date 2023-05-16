@@ -18,6 +18,8 @@ declare module '@vue/runtime-core' {
     BFormGroup: typeof import('bootstrap-vue-next')['BFormGroup']
     BFormInput: typeof import('bootstrap-vue-next')['BFormInput']
     BFormSelect: typeof import('bootstrap-vue-next')['BFormSelect']
+    BIconArrowLeftSquareFill: typeof import('bootstrap-vue-next')['BIconArrowLeftSquareFill']
+    BIconArrowRightSquareFill: typeof import('bootstrap-vue-next')['BIconArrowRightSquareFill']
     BNav: typeof import('bootstrap-vue-next')['BNav']
     BNavItem: typeof import('bootstrap-vue-next')['BNavItem']
     BNavItemDropdown: typeof import('bootstrap-vue-next')['BNavItemDropdown']
