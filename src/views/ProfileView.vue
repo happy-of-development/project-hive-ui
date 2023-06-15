@@ -1,7 +1,24 @@
 <script>
 export default {
+  data() {
+    return {
+      modifyMode : false
+    }
+  },
+  methods : {
+      onModifyClick() {
+        this.modifyMode = true;
+      },
+      onConfirmClick() {
+        
+      },
+      onCancelClick() {
+        this.modifyMode = false;
+        
+      }
+    }
+  }
 
-}
 </script>
 
 
@@ -27,18 +44,24 @@ export default {
             <span class="input-group-text justify-content-center mt-3">팀</span>
             <span class="input-group-text justify-content-center mt-3">이메일</span>
             <span class="input-group-text justify-content-center mt-3">전화번호</span>
+            <span id="password-label" class="input-group-text justify-content-center mt-3" v-bind:class="{'d-none' : !modifyMode}">비밀번호</span>
+            <span id="reenter-password-label" class="input-group-text justify-content-center mt-3" v-bind:class="{'d-none' : !modifyMode}">비밀번호확인</span>
           </div>
           <div class="col-8">
             <input type="text" class="form-control no-select mt-3">
+            <input id="name" type="text" class="form-control mt-3" v-bind:class="{'no-select' : !modifyMode}">
             <input type="text" class="form-control no-select mt-3">
-            <input type="text" class="form-control no-select mt-3">
-            <input type="email" class="form-control no-select mt-3">
-            <input type="text" class="form-control no-select mt-3">
+            <input id="email" type="email" class="form-control mt-3" v-bind:class="{'no-select' : !modifyMode}">
+            <input id="mobile" type="text" class="form-control mt-3" v-bind:class="{'no-select' : !modifyMode}">
+            <input id="password" type="password" class="form-control mt-3" v-bind:class="{'d-none' : !modifyMode}">
+            <input id="reenter-password" type="password" class="form-control mt-3" v-bind:class="{'d-none' : !modifyMode}">
           </div>
         </div>
         
-        <div class="mt-3">
-          <button type="button" class="btn btn-primary">정보수정</button>
+        <div>
+          <button id="modify" type="button" class="btn btn-primary m-3" v-bind:class="{'d-none' : modifyMode}" @click="onModifyClick">정보수정</button>
+          <button id="confirm" type="button" class="btn btn-primary m-3" v-bind:class="{'d-none' : !modifyMode}" @click="onConfirmClick">완료</button>
+          <button id="cancel" type="button" class="btn btn-primary m-3" v-bind:class="{'d-none' : !modifyMode}" @click="onCancelClick">취소</button>
         </div>
       </div>
     </div>
