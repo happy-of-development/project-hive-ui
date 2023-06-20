@@ -1,7 +1,5 @@
 <template>
   <div>
-    <link href="../assets/bootstrap.min.css" rel="stylesheet">
-
     <div class="container">
       <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
         <div class="col-md-3 mb-2 mb-md-0">
