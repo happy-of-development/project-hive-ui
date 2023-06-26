@@ -8,14 +8,14 @@ export default {
       orgProfile : {
         id : '11111111',
         name : '닉네임',
-        team : '우리팀',
+        teamName : '우리팀',
         email : 'test@test.com',
         mobile : '010-1111-1111'
       },
       profile : {
         id : '',
         name : '',
-        team : '',
+        teamName : '',
         email : '',
         mobile : ''
       },
@@ -25,22 +25,25 @@ export default {
     }
   },  
   mounted() {
-    // 객체를 복사함. this.orgProfile로 직접 assign하면 객체 참조가 됨.
     this.fetchData();
   },
   methods : {
       fetchData() {
         axios.get('http://localhost:9080/user?id=11111111', {
           headers: {
-            'x-auth-token': '48e16eae-6a8a-42ba-85f1-1a405c500b70'
-          }
+            'x-auth-token': '48e16eae-6a8a-42ba-85f1-1a405c500b70',
+          }, 
         })
         .then(res=>{
           console.log(res.data)
-          console.log(res.data.data.teamName)
-          this.orgProfile.team = res.data.data.teamName;
 
-          this.profile = {...this.orgProfile}
+          if(res.data.code === '200') {
+            this.orgProfile = res.data.data
+            // 객체를 복사함. this.orgProfile로 직접 assign하면 객체 참조가 됨.
+            this.profile = {...this.orgProfile}
+          } else {
+            console.log("error code : "  + res.data.code)
+          }
         })
         .catch(function(error) {
           console.log(error)
@@ -49,9 +52,42 @@ export default {
       onModifyClick() {
         this.modifyMode = true
       },
-      onConfirmClick() {
+      confirmSubmit() {
+        if(this.password !== this.reenterPassword) {
+          console.log('비밀 번호와 재입력 비밀 번호가 맞지 않습니다.')
+        } else {
+          const body = {id:this.profile.id,
+            name:this.profile.name,
+            mobile:this.profile.mobile,
+            email:this.profile.email, }
 
-        this.modifyMode = false
+          if(password !== '') {
+            body.password = this.password
+            
+          }
+          axios.put('http://localhost:9080/user', body, 
+            {
+            headers: {
+              'x-auth-token': '48e16eae-6a8a-42ba-85f1-1a405c500b70'
+            }            
+          })
+          .then(res=>{
+            console.log(res.data)
+
+            if(res.data.code === '200') {              
+             this.fetchData()
+             this.password = ''
+             this.reenterPassword = ''
+            } else {
+              console.log("error code : "  + res.data.code)
+            }
+          })
+          .catch(function(error) {
+            console.log(error)
+          });
+
+          this.modifyMode = false
+        }
       },
       onCancelClick() {
         this.profile = {...this.orgProfile}
@@ -63,6 +99,7 @@ export default {
   }
 
 </script>
+
 
 
 <template>
@@ -79,34 +116,62 @@ export default {
       </div>
 
       <!-- 사용자 정보-->
-      <div class="col-md-4 ">
+      <form class="needs-validation col-md-4 novalidate" v-on:submit="confirmSubmit">
         <div class="row">
-          <div class="col-4">
-            <span class="input-group-text justify-content-center mt-3">아이디</span>
-            <span class="input-group-text justify-content-center mt-3">이름</span>
-            <span class="input-group-text justify-content-center mt-3">팀</span>
-            <span class="input-group-text justify-content-center mt-3">이메일</span>
-            <span class="input-group-text justify-content-center mt-3">전화번호</span>
-            <span id="password-label" class="input-group-text justify-content-center mt-3" v-bind:class="{'d-none' : !modifyMode}">비밀번호</span>
-            <span id="reenter-password-label" class="input-group-text justify-content-center mt-3" v-bind:class="{'d-none' : !modifyMode}">비밀번호확인</span>
+          <div class="col-12 mt-3">
+            <div class="input-group">
+              <span class = "input-group-text justify-content-center col-4">아이디</span>
+              <input type="text" class="form-control no-select" v-model="profile.id" disabled>
+            </div>
           </div>
-          <div class="col-8">
-            <input type="text" class="form-control no-select mt-3" v-model="profile.id">
-            <input id="name" type="text" class="form-control mt-3" v-bind:class="{'no-select' : !modifyMode}" v-model="profile.name">
-            <input type="text" class="form-control no-select mt-3" v-model="profile.team">
-            <input id="email" type="email" class="form-control mt-3" v-bind:class="{'no-select' : !modifyMode}" v-model="profile.email">
-            <input id="mobile" type="text" class="form-control mt-3" v-bind:class="{'no-select' : !modifyMode}" v-model="profile.mobile">
-            <input id="password" type="password" class="form-control mt-3" v-bind:class="{'d-none' : !modifyMode}" v-model="password">
-            <input id="reenter-password" type="password" class="form-control mt-3" v-bind:class="{'d-none' : !modifyMode}" v-model="reenterPassword">
+          <div class="col-12 mt-3">
+            <div class="input-group has-validation">
+              <span class = "input-group-text justify-content-center col-4" >이름</span>
+              <input type="text" class="form-control" id="name" v-bind:class="{'no-select' : !modifyMode}" v-model="profile.name" required>
+              <div class="invalid-feedback">이름을 입력해 주세요.</div>
+            </div>
+          </div>
+          <div class="col-12 mt-3">
+            <div class="input-group">
+              <span class = "input-group-text justify-content-center col-4" >팀</span>
+              <input type="text" class="form-control no-select"  v-model="profile.teamName" disabled>
+            </div>
+          </div>
+          <div class="col-12 mt-3">
+            <div class="input-group has-validation">
+              <span class = "input-group-text justify-content-center col-4" >이메일</span>
+              <input type="email" class="form-control" id="email" v-bind:class="{'no-select' : !modifyMode}" v-model="profile.email" required>
+              <div class="invalid-feedback">이메일을 입력해 주세요.</div>
+            </div>
+          </div>
+          <div class="col-12 mt-3">
+            <div class="input-group has-validation">
+              <span class = "input-group-text justify-content-center col-4" >전화번호</span>
+              <input type="text" class="form-control" id="mobile" v-bind:class="{'no-select' : !modifyMode}" v-model="profile.mobile" required>
+              <div class="invalid-feedback">전화번호를 입력해 주세요.</div>
+            </div>
+          </div>
+          <div class="col-12 mt-3">
+            <div class="input-group">
+              <span class = "input-group-text justify-content-center col-4" v-bind:class="{'d-none' : !modifyMode}" >비밀번호</span>
+              <input type="text" class="form-control" id="password"  v-bind:class="{'d-none' : !modifyMode}" v-model="password">
+            </div>
+          </div>
+          <div class="col-12 mt-3">
+            <div class="input-group has-validation">
+              <span class = "input-group-text justify-content-center col-4" v-bind:class="{'d-none' : !modifyMode}">비밀번호확인</span>
+              <input type="text" class="form-control" id="reenterPassword" v-bind:class="{'d-none' : !modifyMode}" v-model="reenterPassword">
+              <div class="invalid-feedback">입력한 비밀번호가 다릅니다.</div>
+            </div>
           </div>
         </div>
         
         <div>
           <button id="modify" type="button" class="btn btn-primary m-3" v-bind:class="{'d-none' : modifyMode}" @click="onModifyClick">정보수정</button>
-          <button id="confirm" type="button" class="btn btn-primary m-3" v-bind:class="{'d-none' : !modifyMode}" @click="onConfirmClick">완료</button>
+          <button id="confirm" type="submit" class="btn btn-primary m-3" v-bind:class="{'d-none' : !modifyMode}">완료</button>
           <button id="cancel" type="button" class="btn btn-primary m-3" v-bind:class="{'d-none' : !modifyMode}" @click="onCancelClick">취소</button>
         </div>
-      </div>
+      </form>
     </div>
   </div>
 </template>
@@ -115,5 +180,14 @@ export default {
 <style>
 .no-select {
   pointer-events: none;
+}
+
+input[type="text"]:disabled {
+  background: #eeeeee;
+}
+
+span.input-group-text {
+  background-color:rgba(49, 108, 244, 0.7);
+  color:white;
 }
 </style>
