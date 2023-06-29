@@ -1,5 +1,9 @@
 <script>
+import { inject } from 'vue'
 import axios from 'axios'
+import { UserService } from '../services/UserService.ts'
+
+const userService = new UserService()
 
 export default {
   
@@ -21,7 +25,7 @@ export default {
       },
       password : '',
       reenterPassword : '',
-      modifyMode : false
+      modifyMode : false,
     }
   },  
   mounted() {
@@ -29,51 +33,39 @@ export default {
   },
   methods : {
       fetchData() {
-        axios.get('http://localhost:9080/user?id=11111111', {
-          headers: {
-            'x-auth-token': '48e16eae-6a8a-42ba-85f1-1a405c500b70',
-          }, 
-        })
-        .then(res=>{
-          console.log(res.data)
-
-          if(res.data.code === '200') {
-            this.orgProfile = res.data.data
-            // 객체를 복사함. this.orgProfile로 직접 assign하면 객체 참조가 됨.
-            this.profile = {...this.orgProfile}
-          } else {
-            console.log("error code : "  + res.data.code)
-          }
-        })
-        .catch(function(error) {
-          console.log(error)
-        });
+          userService.getUser('11111111')
+          .then(res =>  {
+            if(res.data.code === '200') {
+              this.orgProfile = res.data.data
+              // 객체를 복사함. this.orgProfile로 직접 assign하면 객체 참조가 됨.
+              this.profile = {...this.orgProfile}
+            } else {
+              console.log("error code : "  + res.data.code)
+            }
+          }) 
+          .catch(function(error) {
+            console.log(error)
+          });
       },
       onModifyClick() {
         this.modifyMode = true
       },
       confirmSubmit() {
+        console.log("confirmSubmit 1")
         if(this.password !== this.reenterPassword) {
           console.log('비밀 번호와 재입력 비밀 번호가 맞지 않습니다.')
         } else {
-          const body = {id:this.profile.id,
+          const entity = {id:this.profile.id,
             name:this.profile.name,
             mobile:this.profile.mobile,
             email:this.profile.email, }
 
           if(password !== '') {
-            body.password = this.password
-            
+            entity.password = this.password
           }
-          axios.put('http://localhost:9080/user', body, 
-            {
-            headers: {
-              'x-auth-token': '48e16eae-6a8a-42ba-85f1-1a405c500b70'
-            }            
-          })
-          .then(res=>{
-            console.log(res.data)
 
+          userService.putUser(entity)
+          .then(res=>{
             if(res.data.code === '200') {              
              this.fetchData()
              this.password = ''
